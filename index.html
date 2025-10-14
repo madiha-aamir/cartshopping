@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add to Cart System</title>
+</head>
+
+<body style="font-family: Arial; background-color: #f9f0ff; margin: 30px;">
+
+  <!--  PAGE HEADING  -->
+  <h2 style="text-align:center; color:#663399; letter-spacing:1px;">🛒 Add to Cart System</h2>
+  <hr style="border:1px solid #663399; width:60%; margin-bottom:30px;">
+
+  <!--  PRODUCT LIST  -->
+  <div style="max-width:650px; margin:auto;">
+
+    <!-- Product 1 -->
+    <div style="background:#ffffff; padding:12px 20px; margin:12px 0;
+                border:1px solid #d4a5f9; border-radius:8px;
+                display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:16px; color:#4a148c;"><b>Necklace</b> - Rs.2000</span>
+      <button style="background-color:#b366ff; color:white; border:none;
+                     padding:8px 14px; border-radius:6px; cursor:pointer;
+                     font-size:14px;"
+              onclick="addToCart('Necklace',2000)">
+        Add to Cart
+      </button>
+    </div>
+
+    <!-- Product 2 -->
+    <div style="background:#ffffff; padding:12px 20px; margin:12px 0;
+                border:1px solid #d4a5f9; border-radius:8px;
+                display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:16px; color:#4a148c;"><b>Bracelet</b> - Rs.1500</span>
+      <button style="background-color:#b366ff; color:white; border:none;
+                     padding:8px 14px; border-radius:6px; cursor:pointer;
+                     font-size:14px;"
+              onclick="addToCart('Bracelet',1500)">
+        Add to Cart
+      </button>
+    </div>
+
+    <!-- Product 3 -->
+    <div style="background:#ffffff; padding:12px 20px; margin:12px 0;
+                border:1px solid #d4a5f9; border-radius:8px;
+                display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:16px; color:#4a148c;"><b>Ring</b> - Rs.1000</span>
+      <button style="background-color:#b366ff; color:white; border:none;
+                     padding:8px 14px; border-radius:6px; cursor:pointer;
+                     font-size:14px;"
+              onclick="addToCart('Ring',1000)">
+        Add to Cart
+      </button>
+    </div>
+
+    <!-- Product 4 -->
+    <div style="background:#ffffff; padding:12px 20px; margin:12px 0;
+                border:1px solid #d4a5f9; border-radius:8px;
+                display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:16px; color:#4a148c;"><b>Earrings</b> - Rs.1200</span>
+      <button style="background-color:#b366ff; color:white; border:none;
+                     padding:8px 14px; border-radius:6px; cursor:pointer;
+                     font-size:14px;"
+              onclick="addToCart('Earrings',1200)">
+        Add to Cart
+      </button>
+    </div>
+  </div>
+
+  <!-- CART TABLE  -->
+  <h3 style="color:#663399; text-align:center; margin-top:40px;">💜 Your Shopping Cart</h3>
+
+  <table id="cartTable"
+         style="width:90%; margin:auto; border-collapse:collapse;
+                background:white; border-radius:6px; box-shadow:0 0 8px rgba(0,0,0,0.1);">
+    <thead>
+      <tr style="background-color:#d4a5f9; color:#4a148c;">
+        <th style="border:1px solid #b266ff; padding:10px;">Item</th>
+        <th style="border:1px solid #b266ff; padding:10px;">Price (Rs)</th>
+        <th style="border:1px solid #b266ff; padding:10px;">Quantity</th>
+        <th style="border:1px solid #b266ff; padding:10px;">Subtotal</th>
+        <th style="border:1px solid #b266ff; padding:10px;">Action</th>
+      </tr>
+    </thead>
+    <tbody id="cartBody"></tbody>
+  </table>
+
+  <!--  TOTAL PRICE  -->
+  <p style="text-align:right; font-size:18px; color:#4a148c; margin:20px 50px 0 0;">
+    <b>Total Price: Rs. <span id="totalPrice">0</span></b>
+  </p>
+
+  <!--  JAVASCRIPT SECTION  -->
+  <script>
+    // Array to store cart items
+    let cart = [];
+
+    // Function to add product to the cart
+    function addToCart(name, price) {
+      try {
+        if (!name || isNaN(price)) {
+          throw "Invalid product or price!";
+        }
+
+        // Check if the product already exists
+        let found = cart.find(x => x.name === name);
+
+        if (found) {
+          found.qty++; // Increase quantity
+        } else {
+          cart.push({ name: name, price: price, qty: 1 });
+        }
+
+        showCart(); // Display the updated cart
+      }
+      catch (err) {
+        alert("Error: " + err);
+      }
+    }
+
+    // Function to remove a product
+    function removeItem(name) {
+      cart = cart.filter(x => x.name !== name);
+      showCart();
+    }
+
+    // Function to display cart contents
+    function showCart() {
+      let body = document.getElementById("cartBody");
+      body.innerHTML = "";
+      let total = 0;
+
+      for (let i = 0; i < cart.length; i++) {
+        let item = cart[i];
+        let sub = item.price * item.qty;
+        total += sub;
+
+        // Create and display a table row for each item
+        body.innerHTML +=
+          "<tr style='text-align:center; font-size:15px;'>" +
+            "<td style='border:1px solid #b266ff; padding:8px;'>" + item.name + "</td>" +
+            "<td style='border:1px solid #b266ff; padding:8px;'>" + item.price + "</td>" +
+            "<td style='border:1px solid #b266ff; padding:8px;'>" + item.qty + "</td>" +
+            "<td style='border:1px solid #b266ff; padding:8px;'>" + sub + "</td>" +
+            "<td style='border:1px solid #b266ff; padding:8px;'>" +
+              "<button style='background-color:#ff6699; color:white; border:none; padding:6px 10px; border-radius:4px; cursor:pointer;' " +
+                      "onclick=\"removeItem('" + item.name + "')\">Remove</button>" +
+            "</td>" +
+          "</tr>";
+      }
+
+      // Update total price
+      document.getElementById("totalPrice").innerText = total;
+    }
+  </script>
+
+</body>
+</html>
